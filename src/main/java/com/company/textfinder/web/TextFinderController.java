@@ -1,5 +1,7 @@
 package com.company.textfinder.web;
 
+import com.company.textfinder.model.ProductModel;
+import com.company.textfinder.model.RequestModel;
 import com.company.textfinder.service.TextFinderService;
 import java.util.List;
 import java.util.Map;
@@ -17,17 +19,13 @@ public class TextFinderController {
     private TextFinderService textFinderService;
 
     @PostMapping("/case-sensitive")
-    public List<String> searchTextCaseSensitive(@RequestBody Map<String, Object> body) {
-        String searchText = (String) body.get("searchText");
-        List<String> collectionText = (List<String>) body.get("collectionText");
-        return textFinderService.findText(searchText, collectionText);
+    public List<ProductModel> searchTextCaseSensitive(@RequestBody RequestModel requestModel) {
+        return textFinderService.findText(requestModel.getSearchText(), requestModel.getCollectionText());
     }
 
     @PostMapping("/case-insensitive")
-    public List<String> searchTextCaseInsensitive(@RequestBody Map<String, Object> body) {
-        String searchText = (String) body.get("searchText");
-        List<String> collectionText = (List<String>) body.get("collectionText");
-        return textFinderService.findText(searchText, collectionText, Boolean.FALSE);
+    public List<ProductModel> searchTextCaseInsensitive(@RequestBody RequestModel requestModel) {
+        return textFinderService.findText(requestModel.getSearchText(), requestModel.getCollectionText(), Boolean.FALSE);
     }
 
 }

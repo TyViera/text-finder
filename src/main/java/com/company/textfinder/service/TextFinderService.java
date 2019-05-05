@@ -1,5 +1,6 @@
 package com.company.textfinder.service;
 
+import com.company.textfinder.model.ProductModel;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -14,11 +15,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class TextFinderService {
 
-    public List<String> findText(String searchText, List<String> collectionText) {
+    public List<ProductModel> findText(String searchText, List<ProductModel> collectionText) {
         return findText(searchText, collectionText, Boolean.TRUE);
     }
 
-    public List<String> findText(String searchText, List<String> collectionText, Boolean caseSensitive) {
+    public List<ProductModel> findText(String searchText, List<ProductModel> collectionText, Boolean caseSensitive) {
         validateInputs(searchText);
         validateInputs(collectionText);
         Map<String, String> specialGivenCharacters = new HashMap<>();
@@ -33,7 +34,7 @@ public class TextFinderService {
         return collectionText
                 .parallelStream()
                 .filter(this::isNotEmptyString)
-                .filter(word -> validateSearch(wordsToSearch, word, specialGivenCharacters, caseSensitive))
+                .filter(productModel -> validateSearch(wordsToSearch, productModel.getName(), specialGivenCharacters, caseSensitive))
                 .collect(Collectors.toList());
     }
 
@@ -46,7 +47,7 @@ public class TextFinderService {
         }
     }
 
-    private void validateInputs(List<String> collectionText) {
+    private void validateInputs(List<ProductModel> collectionText) {
         if (collectionText == null) {
             throw new RuntimeException("The given collection argument should not be null");
         }
@@ -55,8 +56,8 @@ public class TextFinderService {
         }
     }
 
-    private boolean isNotEmptyString(String value) {
-        return value != null && !value.isEmpty();
+    private boolean isNotEmptyString(ProductModel productModel) {
+        return productModel != null && productModel.getName() != null && !productModel.getName().isEmpty();
     }
 
     private boolean validateSearch(String[] wordsToSearch, String phrase,
